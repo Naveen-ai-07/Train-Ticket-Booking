@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, ChangeEvent, FormEvent } from 'react';
+import React, { useState, useEffect, ChangeEvent, FormEvent, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import TrainCard from '../components/TrainCard';
 import { Train } from '@/types';
@@ -20,7 +20,7 @@ const indianStates = [
   "Lakshadweep", "Delhi", "Puducherry", "Ladakh", "Jammu and Kashmir"
 ];
 
-export default function SearchPage() {
+function SearchContent() {
   const searchParams = useSearchParams();
   
   const [fromState, setFromState] = useState(searchParams.get('from') || '');
@@ -84,7 +84,7 @@ export default function SearchPage() {
       );
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <>
       <h1 className="text-3xl font-bold mb-8 text-center text-gray-800">Search Trains</h1>
       
       {/* Search Form */}
@@ -194,6 +194,16 @@ export default function SearchPage() {
           )}
         </div>
       </div>
+    </>
+  );
+}
+
+export default function SearchPage() {
+  return (
+    <div className="container mx-auto px-4 py-8">
+      <Suspense fallback={<div className="text-center py-12">Loading search page...</div>}>
+        <SearchContent />
+      </Suspense>
     </div>
   );
 } 
